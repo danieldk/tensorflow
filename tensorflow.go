@@ -10,7 +10,7 @@ import (
 	"errors"
 	"unsafe"
 
-	tfconfig "github.com/danieldk/toponn/tensorflow/config"
+	tfconfig "github.com/danieldk/tensorflow/config"
 	"github.com/golang/protobuf/proto"
 )
 
