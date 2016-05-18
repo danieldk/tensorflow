@@ -122,9 +122,9 @@ func (s *Session) Run(inputs map[string]Tensor, outputs []string) (map[string]Te
 	status := C.TF_NewStatus()
 	defer C.TF_DeleteStatus(status)
 
-	C.TF_Run(s.session, &inputNames[0], &inputTensors[0], C.int(len(inputNames)),
+	C.TF_Run(s.session, nil, &inputNames[1], &inputTensors[0], C.int(len(inputNames)),
 		&outputNames[0], &outputTensors[0], C.int(len(outputNames)),
-		nil, 0, status)
+		nil, 0, nil, status)
 
 	if C.TF_GetCode(status) != 0 {
 		return nil, errors.New(C.GoString(C.TF_Message(status)))
