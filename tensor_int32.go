@@ -15,6 +15,7 @@ import (
 import "C"
 
 var _ Tensor = &Int32Tensor{}
+var _ Tensor = &Float32Tensor{}
 
 type Int32Tensor struct {
 	dims []int
