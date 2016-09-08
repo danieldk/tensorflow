@@ -104,7 +104,7 @@ func (t *ValueTypeTensor) toCTensor() *C.TF_Tensor {
 	cData := C.malloc(dataLen)
 	C.memcpy(cData, unsafe.Pointer(&t.data[0]), dataLen)
 
-	return C.tfgo_tensor(C.TF_FLOAT, (*C.longlong)(unsafe.Pointer(&llDims[0])),
+	return C.tfgo_tensor(C.TF_FLOAT, (*C.int64_t)(unsafe.Pointer(&llDims[0])),
 		C.int(len(llDims)), cData, dataLen)
 }
 
