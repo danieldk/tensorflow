@@ -7,7 +7,7 @@ There are currently Go bindings brewing in upstream:
   * Source: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/go
   * Issue: https://github.com/tensorflow/tensorflow/issues/10#issuecomment-245687757
 
-Once this is done, it's better the use the upstream binding, since it is always
+Once they are done, it's better the use the upstream binding, since it is always
 in sync with the latest Tensorflow.
 
 # Building
