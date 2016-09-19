@@ -1,3 +1,15 @@
+# Purpose
+
+This binding was created to use Tensorflow in some existing Go projects that I
+have/had. For this reason it only provides the functionality that I need(ed).
+There are currently Go bindings brewing in upstream:
+
+  * Source: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/go
+  * Issue: https://github.com/tensorflow/tensorflow/issues/10#issuecomment-245687757
+
+Once this is done, it's better the use the upstream binding, since it is always
+in sync with the latest Tensorflow.
+
 # Building
 
 Get v0.8.0 of Tensorflow and build it:
