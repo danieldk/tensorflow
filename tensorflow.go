@@ -1,6 +1,7 @@
 package tensorflow
 
-// #cgo LDFLAGS: -lc_api -ltensorflow
+// #cgo CFLAGS: -I/home/ddekok/tensorflow/cpu/0.12
+// #cgo LDFLAGS: -L/home/ddekok/tensorflow/cpu/0.12 -lc_api -ltensorflow
 // #include <stdlib.h>
 // #include <string.h>
 // #include <tensor_c_api.h>
@@ -52,12 +53,12 @@ type Session struct {
 	session *C.TF_Session
 }
 
-func NewSession(opts *SessionOptions) (*Session, error) {
+func NewSession(graph *Graph, opts *SessionOptions) (*Session, error) {
 	status := C.TF_NewStatus()
 	defer C.TF_DeleteStatus(status)
 
 	session := &Session{
-		session: C.TF_NewSession(opts.options, status),
+		session: C.TF_NewSession(graph.graph, opts.options, status),
 	}
 
 	if C.TF_GetCode(status) != 0 {
