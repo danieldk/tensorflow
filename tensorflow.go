@@ -1,7 +1,6 @@
 package tensorflow
 
-// #cgo CFLAGS: -I/home/ddekok/tensorflow/cpu/0.12
-// #cgo LDFLAGS: -L/home/ddekok/tensorflow/cpu/0.12 -lc_api -ltensorflow
+// #cgo LDFLAGS: -lc_api -ltensorflow
 // #include <stdlib.h>
 // #include <string.h>
 // #include <tensor_c_api.h>
