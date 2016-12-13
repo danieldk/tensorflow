@@ -106,8 +106,10 @@ func (s *Session) Run(inputs map[string]Tensor, outputs []string) (map[string]Te
 	for input, tensor := range inputs {
 		cStr := C.CString(input)
 		defer C.free(unsafe.Pointer(cStr))
+		cTensor := tensor.toCTensor()
+		defer C.TF_DeleteTensor(cTensor)
 		inputNames[idx] = cStr
-		inputTensors[idx] = tensor.toCTensor()
+		inputTensors[idx] = cTensor
 		idx++
 	}
 
