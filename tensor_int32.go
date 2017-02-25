@@ -90,7 +90,7 @@ func (t *Int32Tensor) Fill(idx []int, v int32) {
 	}
 }
 
-func (t *Int32Tensor) toCTensor() *C.TF_Tensor {
+func (t *Int32Tensor) ToNative() *NativeTensor {
 	// TF_NewTensor copies dims, does not take ownership.
 	llDims := make([]C.longlong, len(t.dims))
 	for idx, val := range t.dims {
@@ -107,7 +107,9 @@ func (t *Int32Tensor) toCTensor() *C.TF_Tensor {
 
 	C.memcpy(cData, unsafe.Pointer(&t.data[0]), dataLen)
 
-	return cTensor
+	return &NativeTensor{
+		inner: cTensor,
+	}
 }
 
 func adoptint32Tensor(ct *C.TF_Tensor) *Int32Tensor {

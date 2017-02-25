@@ -8,7 +8,19 @@ import "C"
 import "fmt"
 
 type Tensor interface {
-	toCTensor() *C.TF_Tensor
+	ToNative() *NativeTensor
+}
+
+type NativeTensor struct {
+	inner *C.TF_Tensor
+}
+
+func (nt *NativeTensor) Close() {
+	C.TF_DeleteTensor(nt.inner)
+}
+
+func (nt *NativeTensor) ToGo() Tensor {
+	return adoptTensor(nt.inner)
 }
 
 var _ Tensor = &Float32Tensor{}

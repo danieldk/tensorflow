@@ -91,7 +91,7 @@ func (t *ValueTypeTensor) Fill(idx []int, v ValueType) {
 	}
 }
 
-func (t *ValueTypeTensor) toCTensor() *C.TF_Tensor {
+func (t *ValueTypeTensor) ToNative() *NativeTensor {
 	// TF_NewTensor copies dims, does not take ownership.
 	llDims := make([]C.longlong, len(t.dims))
 	for idx, val := range t.dims {
@@ -108,7 +108,9 @@ func (t *ValueTypeTensor) toCTensor() *C.TF_Tensor {
 
 	C.memcpy(cData, unsafe.Pointer(&t.data[0]), dataLen)
 
-	return cTensor
+	return &NativeTensor{
+		inner: cTensor,
+	}
 }
 
 func adoptValueTypeTensor(ct *C.TF_Tensor) *ValueTypeTensor {
