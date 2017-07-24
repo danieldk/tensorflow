@@ -1,6 +1,6 @@
 package tensorflow
 
-// #cgo LDFLAGS: -ltensorflow
+// #cgo LDFLAGS: -ltensorflow_c
 // #include <stdlib.h>
 // #include <string.h>
 // #include <tensor_c_api.h>
@@ -49,15 +49,15 @@ func (opts *SessionOptions) SetConfig(config tfconfig.ConfigProto) error {
 }
 
 type Session struct {
-	session *C.TF_Session
+	session *C.TF_DeprecatedSession
 }
 
-func NewSession(opts *SessionOptions) (*Session, error) {
+func NewSession(graph *Graph, opts *SessionOptions) (*Session, error) {
 	status := C.TF_NewStatus()
 	defer C.TF_DeleteStatus(status)
 
 	session := &Session{
-		session: C.TF_NewSession(opts.options, status),
+		session: C.TF_NewDeprecatedSession(opts.options, status),
 	}
 
 	if C.TF_GetCode(status) != 0 {
@@ -71,12 +71,12 @@ func (s *Session) Close() error {
 	status := C.TF_NewStatus()
 	defer C.TF_DeleteStatus(status)
 
-	C.TF_CloseSession(s.session, status)
+	C.TF_CloseDeprecatedSession(s.session, status)
 	if C.TF_GetCode(status) != 0 {
 		return errors.New(C.GoString(C.TF_Message(status)))
 	}
 
-	C.TF_DeleteSession(s.session, status)
+	C.TF_DeleteDeprecatedSession(s.session, status)
 	if C.TF_GetCode(status) != 0 {
 		return errors.New(C.GoString(C.TF_Message(status)))
 	}
@@ -99,7 +99,7 @@ func (s *Session) ExtendGraph(data []byte) error {
 	return nil
 }
 
-func (s *Session) Run(inputs map[string]Tensor, outputs []string) (map[string]Tensor, error) {
+func (s *Session) Run(inputs map[string]*NativeTensor, outputs []string) (map[string]Tensor, error) {
 	inputNames := make([]*C.char, len(inputs))
 	inputTensors := make([]*C.TF_Tensor, len(inputs))
 	idx := 0
@@ -107,7 +107,7 @@ func (s *Session) Run(inputs map[string]Tensor, outputs []string) (map[string]Te
 		cStr := C.CString(input)
 		defer C.free(unsafe.Pointer(cStr))
 		inputNames[idx] = cStr
-		inputTensors[idx] = tensor.toCTensor()
+		inputTensors[idx] = tensor.inner
 		idx++
 	}
 

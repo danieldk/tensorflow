@@ -15,7 +15,6 @@ import (
 import "C"
 
 var _ Tensor = &Int32Tensor{}
-var _ Tensor = &Float32Tensor{}
 
 type Int32Tensor struct {
 	dims []int
@@ -91,21 +90,26 @@ func (t *Int32Tensor) Fill(idx []int, v int32) {
 	}
 }
 
-func (t *Int32Tensor) toCTensor() *C.TF_Tensor {
+func (t *Int32Tensor) ToNative() *NativeTensor {
 	// TF_NewTensor copies dims, does not take ownership.
 	llDims := make([]C.longlong, len(t.dims))
 	for idx, val := range t.dims {
 		llDims[idx] = C.longlong(val)
 	}
 
-	// TF_NewTensor potentially adopts data, so we cannot pass the Go
-	// slice backing array.
 	dataLen := C.size_t(len(t.data)) * C.size_t(unsafe.Sizeof(t.data[0]))
-	cData := C.malloc(dataLen)
+
+	// Allocate new memory, rather than using the Go slice backing array,
+	// since we cannot fullfil the alignment preferences.
+	cTensor := C.TF_AllocateTensor(C.TF_INT32, (*C.int64_t)(unsafe.Pointer(&llDims[0])),
+		C.int(len(llDims)), dataLen)
+	cData := C.TF_TensorData(cTensor)
+
 	C.memcpy(cData, unsafe.Pointer(&t.data[0]), dataLen)
 
-	return C.tfgo_tensor(C.TF_INT32, (*C.longlong)(unsafe.Pointer(&llDims[0])),
-		C.int(len(llDims)), cData, dataLen)
+	return &NativeTensor{
+		inner: cTensor,
+	}
 }
 
 func adoptint32Tensor(ct *C.TF_Tensor) *Int32Tensor {
