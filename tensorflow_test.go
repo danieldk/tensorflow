@@ -6,7 +6,10 @@ func TestSession(t *testing.T) {
 	opts := NewSessionOptions()
 	defer opts.Close()
 
-	sess, err := NewSession(opts)
+	graph := NewGraph()
+	defer graph.Close()
+
+	sess, err := NewSession(graph, opts)
 	if err != nil {
 		t.Error(err)
 	}
