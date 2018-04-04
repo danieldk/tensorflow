@@ -1,6 +1,5 @@
 package tensorflow
 
-// #include <tensor_c_api.h>
 // #include "tensorflow.h"
 import "C"
 
@@ -11,7 +10,7 @@ type Graph struct {
 
 // NewGraph allocates a graph.
 func NewGraph() *Graph {
-	return &Graph {
+	return &Graph{
 		graph: C.TF_NewGraph(),
 	}
 }

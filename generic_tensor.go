@@ -3,9 +3,9 @@ package tensorflow
 //go:generate genny -in=$GOFILE -out=tensor_int32.go gen "ValueType=int32 ValueCType=C.TF_INT32"
 
 // #include <string.h>
-// #include <tensor_c_api.h>
 // #include "tensorflow.h"
 import "C"
+
 import (
 	"fmt"
 	"unsafe"

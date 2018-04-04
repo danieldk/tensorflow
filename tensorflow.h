@@ -1,6 +1,6 @@
 #include <stddef.h>
 
-#include <tensor_c_api.h>
+#include <tensorflow/c/c_api.h>
 
 TF_Tensor *tfgo_tensor(TF_DataType type, int64_t const *dims, int num_dims,
     void *data, size_t len);

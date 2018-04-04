@@ -1,9 +1,8 @@
 package tensorflow
 
-// #cgo LDFLAGS: -ltensorflow_c
+// #cgo LDFLAGS: -ltensorflow
 // #include <stdlib.h>
 // #include <string.h>
-// #include <tensor_c_api.h>
 // #include "tensorflow.h"
 import "C"
 import (

@@ -5,12 +5,12 @@
 package tensorflow
 
 import (
+	"C"
 	"fmt"
 	"unsafe"
 )
 
 // #include <string.h>
-// #include <tensor_c_api.h>
 // #include "tensorflow.h"
 import "C"
 
